@@ -327,7 +327,7 @@ IkuSan - IkuSan is IRC reaction bot framework.
 
 =head1 DESCRIPTION
 
-IkuSan is IRC reaction bot framework. This framework was inspired by L<UnazuSan> by songmu.
+IkuSan is IRC reaction bot framework. This framework was inspired by L<UnazuSan> by songmu and L<App::Ikachan> by yappo.
 
 THE SOFTWARE IS ALPHA QUALITY. API MAY CHANGE WITHOUT NOTICE.
 
