@@ -133,7 +133,7 @@ sub new {
                             my ($pm, $receive, $sub, $message, @matches) = @_;
                             $self->{on_start}->($pm, $receive, $sub, $message, @matches);
                             try {
-                                $sub->($pm, $receive, @matches);
+                                $sub->($pm, $receive, $sub, $message, @matches);
                             } catch {
                                 $self->{on_error}->($_, $pm, $receive, $sub, $message, @matches);
                             } finally {
@@ -238,13 +238,13 @@ sub _build_option_args {
 package # hide from pause
     AnySan::Receive;
 
-use LWP::UserAgent;
+use Furl;
 use Encode qw/encode_utf8/;
 
-sub ua {
+sub furl {
     my $self = shift;
-    $self->{_ua} ||= LWP::UserAgent->new(timeout => 2);
-    $self->{_ua}
+    $self->{_furl} = Furl->new();
+    $self->{_furl};
 }
 
 sub notice {
@@ -264,12 +264,12 @@ sub reply {
         $self->attribute('send_command', 'PRIVMSG') if ($args{privmsg});
         $self->send_reply($msg[0]);
     } else {
-        $self->ua->post(
-            sprintf("http://%s:%s", $self->{http_host}, $self->{http_port}), {
+        $self->furl->post(
+            sprintf("http://%s:%s", $self->{http_host}, $self->{http_port}), [], [
                 message => encode_utf8 $msg,
                 channel => $self->attribute("channel"),
                 privmsg => $args{privmsg} || 0,
-            },
+            ],
         );
     }
 }
@@ -299,7 +299,7 @@ IkuSan - IkuSan is IRC reaction bot framework.
         sleep => [qw/
             time|t=i
         /] => sub {
-            my ($pm, $receive, %args) = @_;
+            my ($pm, $receive, $sub, $message, %args) = @_;
             $receive->privmsg($receive->{from_nickname}.": sleep");
             for my $c (1..$args{time}) {
                 sleep 1;
@@ -311,14 +311,14 @@ IkuSan - IkuSan is IRC reaction bot framework.
 
     $ikusan->on_command(
         echo => sub {
-            my ($pm, $receive, @args) = @_;
+            my ($pm, $receive, $sub, $message, @args) = @_;
             $receive->privmsg($receive->{from_nickname}.": ".join(" ", @args));
         },
     );
 
     $ikusan->on_message(
         qr/^iku:?/ => sub {
-            my ($pm, $receive) = @_;
+            my ($pm, $receive, $sub, $message) = @_;
             $receive->privmsg($receive->{from_nickname}.": un-huh");
         },
     );

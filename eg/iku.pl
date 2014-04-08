@@ -5,7 +5,6 @@ use utf8;
 use Encode qw/encode_utf8/;
 
 use IkuSan;
-use Data::Validator;
 use Try::Tiny;
 
 my $ikusan = IkuSan->new(
@@ -32,32 +31,27 @@ $ikusan->on_option(
         time|t=i
         die|d
     /] => sub {
-        my ($pm, $receive, %args) = @_;
-        state $validator = Data::Validator->new(
-            time => { isa => "Int"                },
-            die  => { isa => "Bool", default => 0 },
-        );
-        my $args = $validator->validate(%args) or die "validation error";
+        my ($pm, $receive, $sub, $message, %args) = @_;
         $receive->privmsg($receive->{from_nickname}.": 寝ます");
-        for my $c (1..$args->{time}) {
+        for my $c (1..$args{time}) {
             sleep 1;
             $receive->notice("zzz…(".$c.")");
         }
-        die if $args->{die};
+        die if ($args{die});
         $receive->privmsg($receive->{from_nickname}.": 起きました");
     },
 );
 
 $ikusan->on_command(
     echo => sub {
-        my ($pm, $receive, @args) = @_;
+        my ($pm, $receive, $sub, $message, @args) = @_;
         $receive->privmsg($receive->{from_nickname}.": ".join(" ", @args));
     },
 );
 
 $ikusan->on_message(
     qr/^iku:?/ => sub {
-        my ($pm, $receive) = @_;
+        my ($pm, $receive, $sub, $message) = @_;
         $receive->privmsg($receive->{from_nickname}.": ｻﾀﾃﾞｰﾅｲﾄﾌｨｰﾊﾞｰ!");
     },
 );
