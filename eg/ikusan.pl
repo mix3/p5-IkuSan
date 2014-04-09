@@ -1,11 +1,7 @@
 #!/usr/bin/env perl
-use 5.010;
-use warnings;
-use utf8;
-use Encode qw/encode_utf8/;
 
+use utf8;
 use IkuSan;
-use Try::Tiny;
 
 my $ikusan = IkuSan->new(
     host          => 'example.com',
@@ -13,7 +9,7 @@ my $ikusan = IkuSan->new(
     enable_ssl    => 1,
     join_channels => [qw/test/],
     max_workers   => 3,
-#   respond_all   => 1,
+
     on_option_error => sub {
         my ($e, $receive) = @_;
         warn "on_option_error: $e";
@@ -37,7 +33,7 @@ $ikusan->on_option(
             sleep 1;
             $receive->notice("zzz…(".$c.")");
         }
-        die if ($args{die});
+        die if ($args{die}); # will catch
         $receive->privmsg($receive->{from_nickname}.": 起きました");
     },
 );
@@ -50,10 +46,10 @@ $ikusan->on_command(
 );
 
 $ikusan->on_message(
-    qr/^iku:?/ => sub {
+    qr/^ikusan:?\s+/ => sub {
         my ($pm, $receive, $sub, $message) = @_;
         $receive->privmsg($receive->{from_nickname}.": ｻﾀﾃﾞｰﾅｲﾄﾌｨｰﾊﾞｰ!");
     },
 );
 
-$ikusan->run;
+$ikusan->fever;

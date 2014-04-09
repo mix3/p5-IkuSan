@@ -1,5 +1,7 @@
 package IkuSan;
-use 5.008005;
+
+use 5.10.0;
+
 use strict;
 use warnings;
 
@@ -22,7 +24,7 @@ sub new {
     my %args = @_ == 1 ? %{$_[0]} : @_;
     my $self = bless \%args, $class;
 
-    $self->{nickname}           //= 'iku';
+    $self->{nickname}           //= 'ikusan';
     $self->{port}               ||= 6667;
     $self->{post_interval}      //= 2;
     $self->{reconnect_interval} //= 3;
@@ -180,9 +182,7 @@ sub _build_command_reg {
     my $prefix = '^\s*'.quotemeta($nick). '_*[:\s]\s*' . quotemeta($command);
 }
 
-sub run {
-    AnySan->run;
-}
+sub fever { AnySan->run }
 
 sub respond_all { shift->{respond_all} }
 
@@ -292,6 +292,7 @@ IkuSan - IkuSan is IRC reaction bot framework.
 
 =head1 SYNOPSIS
 
+    use utf8;
     use IkuSan;
 
     my $ikusan = IkuSan->new(
@@ -304,14 +305,16 @@ IkuSan - IkuSan is IRC reaction bot framework.
     $ikusan->on_option(
         sleep => [qw/
             time|t=i
+            die|d
         /] => sub {
             my ($pm, $receive, $sub, $message, %args) = @_;
-            $receive->privmsg($receive->{from_nickname}.": sleep");
+            $receive->privmsg($receive->{from_nickname}.": 寝ます");
             for my $c (1..$args{time}) {
                 sleep 1;
                 $receive->notice("zzz…(".$c.")");
             }
-            $receive->privmsg($receive->{from_nickname}.": wakeup");
+            die if ($args{die}); # will catch
+            $receive->privmsg($receive->{from_nickname}.": 起きました");
         },
     );
 
@@ -323,17 +326,17 @@ IkuSan - IkuSan is IRC reaction bot framework.
     );
 
     $ikusan->on_message(
-        qr/^iku:?/ => sub {
+        qr/^ikusan:?/ => sub {
             my ($pm, $receive, $sub, $message) = @_;
-            $receive->privmsg($receive->{from_nickname}.": un-huh");
+            $receive->privmsg($receive->{from_nickname}.": ｻﾀﾃﾞｰﾅｲﾄﾌｨｰﾊﾞｰ!");
         },
     );
 
-    $ikusan->run;
+    $ikusan->fever;
 
 =head1 DESCRIPTION
 
-IkuSan is IRC reaction bot framework. This framework was inspired by L<UnazuSan> by songmu and L<App::Ikachan> by yappo.
+IkuSan is IRC reaction bot framework. IkuSan was inspired by L<UnazuSan> by songmu and L<App::Ikachan> by yappo.
 
 THE SOFTWARE IS ALPHA QUALITY. API MAY CHANGE WITHOUT NOTICE.
 
