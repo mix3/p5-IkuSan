@@ -282,7 +282,7 @@ __END__
 
 =begin html
 
-<img src="https://raw.githubusercontent.com/mix3/p5-IkuSan/feature/aa/AA.png" alt="AA" />
+<img src="https://raw.githubusercontent.com/mix3/p5-IkuSan/feature/aa/share/AA.png" alt="AA" />
 
 =end html
 
