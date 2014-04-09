@@ -1,7 +1,7 @@
 {
-   "abstract" : "It's new $module",
+   "abstract" : "IkuSan is IRC reaction bot framework.",
    "author" : [
-      "mix3 <himachocost333@hotmail.co.jp>"
+      "mix3 <himachocost333@gmail.com>"
    ],
    "dynamic_config" : 0,
    "generated_by" : "Minilla/v0.11.0, CPAN::Meta::Converter version 2.132830",
@@ -43,7 +43,15 @@
       },
       "runtime" : {
          "requires" : {
-            "perl" : "5.008005"
+            "AnyEvent::ForkManager" : "0",
+            "AnySan" : "0",
+            "Encode" : "0",
+            "Furl" : "0",
+            "Getopt::Long" : "0",
+            "Plack::Request" : "0",
+            "Try::Tiny" : "0",
+            "Twiggy::Server" : "0",
+            "perl" : "v5.10.0"
          }
       },
       "test" : {
@@ -53,5 +61,18 @@
       }
    },
    "release_status" : "unstable",
-   "version" : "0.01"
+   "resources" : {
+      "bugtracker" : {
+         "web" : "https://github.com/mix3/p5-IkuSan/issues"
+      },
+      "homepage" : "https://github.com/mix3/p5-IkuSan",
+      "repository" : {
+         "url" : "https://github.com/mix3/p5-IkuSan.git",
+         "web" : "https://github.com/mix3/p5-IkuSan"
+      }
+   },
+   "version" : "0.01",
+   "x_contributors" : [
+      "mix3 <himachocost333@hotmail.co.jp>"
+   ]
 }
