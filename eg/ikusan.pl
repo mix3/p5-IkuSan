@@ -46,7 +46,7 @@ $ikusan->on_command(
 );
 
 $ikusan->on_message(
-    qr/^ikusan:?\s+/ => sub {
+    qr/^ikusan:?/ => sub {
         my ($pm, $receive, $sub, $message) = @_;
         $receive->privmsg($receive->{from_nickname}.": ｻﾀﾃﾞｰﾅｲﾄﾌｨｰﾊﾞｰ!");
     },
